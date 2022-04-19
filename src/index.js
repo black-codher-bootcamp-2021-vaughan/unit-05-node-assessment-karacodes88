@@ -67,12 +67,7 @@ app.get('/todos/completed', (_, res) => {
   });
  
 
-// fs.writeFile(__dirname + process.env.BASE_JSON_PATH,  err => {
-//   if (err) {
-//     console.error(err)
-//     return
-// }
-// })
+
 //Add POST request with path '/todos'
 
 app.post('/todos', (req, res) => {
@@ -120,70 +115,77 @@ if (!foundTodo){
  });
 
 
-//Add POST request with path '/todos/:id/complete
-// app.post('/todos/:id/complete', (req, res) => {
-//   var fs = require("fs");
-//   console.log( req.params.id );
-//   const todo = todos.map( todo => {
-//       if (todo.id == req.params.id ){
-//         todo.completed = true;
-//       }
-//    } );
-//   if (!todo) return res.sendStatus(400);
-//   fs.writeFile( __dirname + todoFilePath , JSON.stringify(todo) , err => {
-//     if ("bad request") {
-//       console.error(err)
-//       return
-//     }
-// });
-//   res.json(todo);
+// Add POST request with path '/todos/:id/complete
+app.post('/todos/:id/complete', (req, res) => {
+  var fs = require("fs");
+  console.log( req.params.id );
 
-//  });
+  const todoComplete = todos.map( todo => {
+      if (todo.id == req.params.id ){
+        todo.completed = true;
+      }
+    return todo;
+   } );
+  if (!todos) return res.sendStatus(400);
+  fs.writeFile( __dirname + todoFilePath , JSON.stringify(todos) , err => {
+    if ("bad request") {
+      console.error(err)
+      return
+    }
+});
 
-// //Add POST request with path '/todos/:id/undo
-// app.post('/todos/:id/undo', (req, res) => {
-//   var fs = require("fs");
-//   console.log( req.params.id );
-//   const todo = todos.map( todo => {
-//       if (todo.id == req.params.id ){
-//         todo.completed = false;
-//       }
-//    } );
-//   if (!todo) return res.sendStatus(400);
-//   fs.writeFile( __dirname + todoFilePath , JSON.stringify(todo) , err => {
-//     if (err) {
-//       console.error(err)
-//       return
-//     }
-// });
-//   res.json(todo);
+  res.json(todoComplete);})
 
-//  });
 
-// //Add DELETE request with path '/todos/:id
-// app.delete('/api/todos/:id', (req, res) => {
-//   var fs = require("fs");
-//   console.log( req.params.id );
-//   const todo = todos.filter( todo => {
-//       if ( todo.id == req.params.id ){
-//         return false;
-//       }
-//    } );
-//   if (!todo) return res.sendStatus(400);
-//   fs.writeFile( __dirname + todoFilePath , JSON.stringify(todo) , err => {
-//     if (err) {
-//       console.error(err)
-//       return
-//     }
-// });
-//   res.json(todo);
 
-//  });
+
+
+
+
+//Add POST request with path '/todos/:id/undo
+app.post('/todos/:id/undo', (req, res) => {
+  var fs = require("fs");
+  console.log( req.params.id );
+  const todo = todos.map( todo => {
+      if (todo.id == req.params.id ){
+        todo.completed = false;
+      }
+         return todos;
+   } );
+  if (!todo) return res.sendStatus(400);
+  fs.writeFile( __dirname + todoFilePath , JSON.stringify(todo) , err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+});
+  res.json(todo);
+
+ });
+
+//Add DELETE request with path '/todos/:id
+app.delete('/todos/:id', (req, res) => {
+  var fs = require("fs");
+  console.log( req.params.id );
+  const todo = todos.filter( todo => {
+      if ( todo.id == req.params.id ){
+        return false;
+      }
+
+   } );
+  if (!todo) return res.sendStatus(400);
+  fs.writeFile( __dirname + todoFilePath , JSON.stringify(todo) , err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+});
+  res.json(todo);
+
+ });
 
 app.listen(port, function () {
     console.log(`Node server is running... http://localhost:${port}`);
 });
-
-//  console.log("hello");
 
 module.exports = app;
